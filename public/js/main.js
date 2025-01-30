@@ -1,3 +1,5 @@
+let result = [];
+
 function readFile() {
 	let file = document.getElementById("file").files[0];
 	let fr = new FileReader();
@@ -25,19 +27,44 @@ function readFile() {
 
 		convertInputMatrixToImage(matrix, min, max);
 
-		const matrixNormalized = normalize(matrix, min, max, 0, 1000);
+		const matrixNormalized = normalize(matrix, 0, max, 0, 1000);
 
 		const session = await loadModel();
 		const x = Float32Array.from(matrixNormalized);
 		const input = new ort.Tensor("float32", x, [1, 512, 512, 1]);
 		const y = await session.run({ x: input });
 		const output = y.output.data;
+		result = normalize(output, 0, 1000, 0, max);
 		console.log(min, max);
 		convertMatrixToImage(output, min, max);
 	};
 
 	fr.readAsText(file);
 }
+
+function downloadFile(matrix, filename) {
+	let data = "";
+	for (let i = 0; i < matrix.length; i++) {
+		data += matrix[i].toFixed(30);
+		if (i !== matrix.length - 1) {
+			data += " ";
+		}
+		if ((i+1) % 512 === 0 && i !== 0) {
+			data += "\n";
+		}
+	}
+	let blob = new Blob([data], { type: "text/plain" });
+	let url = URL.createObjectURL(blob);
+	let a = document.createElement("a");
+	a.href = url;
+	a.download = filename;
+	a.click();
+}
+
+function downloadResult() {
+	downloadFile(result, "result.txt");
+}
+
 
 function normalize(matrix, min, max, newMin, newMax) {
 	const newMatrix = matrix.map(
