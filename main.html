@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="file" name="file">
+    <button onclick="readFile()">run</button>
+    <br>
+
+    <canvas id="input" width="512" height="512"></canvas>
+    <canvas id="output" width="512" height="512"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+    <script src="web/main.js"></script>
+</body>
+</html>

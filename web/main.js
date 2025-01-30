@@ -58,12 +58,12 @@ function convertMatrixToImage(matrix, min, max) {
 	// rescale the matrix between max and min
 	let matrixRescaled = normalize(matrix, 0, 1000, min, max);
 
-	let matrixLog = matrixRescaled.map((value) => Math.log10(value));
+	let matrixLog = matrixRescaled.map((value) => Math.log10(Math.max(value, min)));
 	let minLog = Math.log10(min);
 	let maxLog = Math.log10(max);
 
 	let matrixImage = matrixLog.map((value) =>
-		value !== -Infinity ? Math.round(((value - minLog) / (maxLog - minLog)) * 255) : 256
+		isFinite(value) ? Math.round(((value - minLog) / (maxLog - minLog)) * 255) : 256
 	);
 	console.log(minLog, maxLog);
 	console.log(matrixImage);
@@ -90,7 +90,7 @@ function convertInputMatrixToImage(matrix, min, max) {
 	let maxLog = Math.log10(max);
 
 	let matrixImage = matrixLog.map((value) =>
-		value !== -Infinity ? Math.round(((value - minLog) / (maxLog - minLog)) * 255) : 256
+		isFinite(value) ? Math.round(((value - minLog) / (maxLog - minLog)) * 255) : 256
 	);
 
 	console.log(minLog, maxLog);
@@ -108,8 +108,27 @@ function convertInputMatrixToImage(matrix, min, max) {
 	ctx.putImageData(imageData, 0, 0);
 }
 
+
+async function fetchMyModel(filepathOrUri) {
+    // use fetch to read model file (browser) as ArrayBuffer
+    if (typeof fetch !== 'undefined') {
+        const response = await fetch(filepathOrUri,
+            {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization"
+            }
+        );
+        return await response.arrayBuffer();
+    }
+}
+
 async function loadModel() {
-	return await ort.InferenceSession.create("../model/autoencoder.onnx");
+    // allow cors for github
+    const headers = new Headers();
+    const model = await fetchMyModel("https://raw.githubusercontent.com/GregoryAd/GhostReflexSim-AI-accelerator/refs/heads/main/model/autoencoder.onnx");
+    console.log(model);
+	return await ort.InferenceSession.create(model);
 }
 
 const _viridis_data = [
