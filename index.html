@@ -6,8 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="file" id="file" name="file">
-    <button onclick="readFile()">run</button>
+    <input type="file" id="file" name="file" oninput="readFile()">
+    <button onclick="runModelInference()">run</button>
     <button onclick="downloadResult()">download</button>
     <br>
 
@@ -15,6 +15,7 @@
     <canvas id="output" width="512" height="512"></canvas>
 
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+    <script src="public/js/colormap.js"></script>
     <script src="public/js/main.js"></script>
 </body>
 </html>
