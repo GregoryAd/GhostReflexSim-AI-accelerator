@@ -164,5 +164,5 @@ async function loadModel() {
 	const model = await fetchMyModel(
 		"https://raw.githubusercontent.com/GregoryAd/GhostReflexSim-AI-accelerator/refs/heads/main/model/autoencoder.onnx"
 	);
-	return await ort.InferenceSession.create("../../model/autoencoder.onnx");
+	return await ort.InferenceSession.create(model);
 }
