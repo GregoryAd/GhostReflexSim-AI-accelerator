@@ -56,7 +56,7 @@ async function runModelInference() {
 	const newMin = getMin(output);
 	const newMax = getMax(output);
 
-	const result = normalize(output, newMin, newMax, matrixMin, matrixMax);
+	result = normalize(output, newMin, newMax, matrixMin, matrixMax);
 	convertMatrixToImage(result, getMin(result, true), matrixMax, "output");
 
 	return output;
@@ -79,6 +79,7 @@ function readMap(fileReader) {
 
 function downloadFile(matrix, filename) {
 	let data = "";
+	console.log(matrix.length);
 	for (let i = 0; i < matrix.length; i++) {
 		data += matrix[i].toFixed(30);
 		if (i !== matrix.length - 1) {
@@ -94,6 +95,7 @@ function downloadFile(matrix, filename) {
 	a.href = url;
 	a.download = filename;
 	a.click();
+	a.remove();
 }
 
 function downloadResult() {
