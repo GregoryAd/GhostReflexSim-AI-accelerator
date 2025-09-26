@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="file" id="file" name="file" oninput="readFile()">
+    <input type="file" id="inputMatrix" name="inputMatrix" oninput="readMatrixFile()">
     <button onclick="runModelInference()">run</button>
     <button onclick="downloadResult()">download</button>
     <br>
@@ -16,6 +16,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
     <script src="public/js/colormap.js"></script>
+    <script src="public/js/map.js"></script>
+    <script src="public/js/plotting.js"></script>
+    <script src="public/js/ai.js"></script>
     <script src="public/js/main.js"></script>
 </body>
 </html>
